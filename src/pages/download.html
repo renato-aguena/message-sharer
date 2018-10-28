@@ -1,0 +1,58 @@
+<script>
+    function saveMessageS3() {
+        var saveMessageS3Request = new XMLHttpRequest();
+        saveMessageS3Request.onload = successMessageS3;
+        saveMessageS3Request.open("post", "http://localhost:4000/s3", true);
+        saveMessageS3Request.setRequestHeader("Content-Type", "application/json");
+        saveMessageS3Request.send(JSON.stringify({
+            title: document.getElementsByName('title')[0].value,
+            message: document.getElementsByName('message')[0].value,
+            canRead: document.getElementsByName('canRead')[0].value
+        }));
+    }
+
+    function successMessageS3() {
+        saveMessageDynamo()
+    }
+
+    function saveMessageDynamo() {
+        var saveMessageDynamoS3Request = new XMLHttpRequest();
+        saveMessageDynamoS3Request.onload = successMessagedynamo;
+        saveMessageDynamoS3Request.open("post", "http://localhost:4000/dynamo", true);
+        saveMessageDynamoS3Request.setRequestHeader("Content-Type", "application/json");
+        saveMessageDynamoS3Request.send(JSON.stringify({
+            title: document.getElementsByName('title')[0].value,
+            message: document.getElementsByName('message')[0].value,
+            canRead: document.getElementsByName('canRead')[0].value
+        }));
+    }
+
+    function successMessagedynamo() {
+        alert(`Mensagem para ${document.getElementsByName('canRead')[0].value} salva com sucesso`)
+    }
+</script>
+
+<label>
+    Título<span style="color: red">*</span>:
+</label>
+<input name="title" type="text" />
+<br>
+<hr>
+
+<label>
+    Mensagem<span style="color: red">*</span>:
+</label>
+<input name="message" type="text" />
+<br>
+<hr>
+
+<label>
+    Quem pode ler?<span style="color: red">*</span>:
+</label>
+<input name="canRead" type="text" />
+<br>
+<hr>
+
+<button onclick="saveMessageS3()">
+    Enviar
+</button>

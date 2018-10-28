@@ -1,0 +1,64 @@
+service: message-sharer
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-s3-local
+  - serverless-offline
+custom:
+  dynamodb:
+    inMemory: true
+    migrate: true
+    seed: true
+    convertEmptyValues: true
+    stages:
+      - dev
+    start:
+      port: 7000
+  s3:
+    host: 0.0.0.0
+    port: 8000
+    directory: ./
+    cors: ./cors.xml
+  serverless-offline:
+    port: 4000
+
+provider:
+  name: aws # serviço em nuvem a ser utilizado
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'dev'} # ambiente
+  region: sa-east-1 # região que ficará hospedada as informações/códigos
+  environment: ${file(./env.json):${self:provider.stage}}
+
+resources:
+  Resources:
+    local-bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
+    messages-table:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: messagesTable
+        AttributeDefinitions:
+          - AttributeName: canRead
+            AttributeType: S
+        KeySchema:
+          - AttributeName: canRead
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+functions:
+  serverless:
+    handler: src/app.serverless
+    events:
+      - http: 
+          method: POST
+          path: s3
+
+  express:
+    handler: src/app.express
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'

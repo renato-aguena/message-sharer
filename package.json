@@ -1,0 +1,29 @@
+{
+  "name": "file-sharer",
+  "version": "1.0.0",
+  "description": "An example of how use serverless to create a lambda function, local dynamodb.",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Renato Kenji Aguena",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.344.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.4",
+    "serverless-http": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-offline": "^3.30.0",
+    "serverless-s3-local": "^0.3.17"
+  }
+}
